@@ -1,5 +1,11 @@
+import Register from "./Register";
+
 const App = () => {
-  return <h1>React authentication</h1>;
+  return (
+    <main className="app">
+      <Register />
+    </main>
+  );
 };
 
 export default App;
