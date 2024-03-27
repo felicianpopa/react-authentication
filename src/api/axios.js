@@ -1,6 +1,12 @@
 import axios from "axios";
+const BASE_URL = "http://localhost:3500";
 
 export default axios.create({
-  // Set the base url so that we can use it everywhere in the project
-  baseURL: "http://localhost:3500", // The nodejs server
+  baseURL: BASE_URL,
+});
+
+export const axiosPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
