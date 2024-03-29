@@ -7,7 +7,11 @@ const useRefreshToken = () => {
       withCredentials: true, // allows us to send cookies in the request
     });
     setAuth((prev) => {
-      return { ...prev, accessToken: response.data.accessToken };
+      return {
+        ...prev,
+        roles: response.data.roles,
+        accessToken: response.data.accessToken,
+      };
     });
     return response.data.accessToken;
   };
