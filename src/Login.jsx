@@ -1,8 +1,12 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "./context/AuthProvider";
-import axios from "./api/axios";
+// import axios from "./api/axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-const LOGIN_URL = "/auth";
+// const LOGIN_URL = "/auth";
+
+import { useDispatch } from "react-redux";
+import { setCredentials } from "./features/auth/authSlice";
+import { useLoginMutation } from "./features/auth/authApiSlice";
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useContext(AuthContext);
@@ -18,6 +22,9 @@ const Login = () => {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -28,17 +35,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      setAuth({ user, roles, accessToken });
+      // const response = await axios.post(
+      //   LOGIN_URL,
+      //   JSON.stringify({ user, pwd }),
+      //   {
+      //     headers: { "Content-Type": "application/json" },
+      //     withCredentials: true,
+      //   }
+      // );
+
+      const userData = await login({ user, pwd }).unwrap();
+      console.warn("userData ", userData);
+      dispatch(setCredentials({ ...userData, user }));
+      // const accessToken = response?.data?.accessToken;
+      // const roles = response?.data?.roles;
+      // setAuth({ user, roles, accessToken });
       setUser("");
       setPwd("");
       navigate(from, { replace: true });
